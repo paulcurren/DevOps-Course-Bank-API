@@ -34,3 +34,29 @@ def test_get_account_raises_error_if_no_account_matches(bank: Bank):
 
 # TODO: Add unit tests for bank.add_funds()
 
+def test_add_funds_no_account(bank: Bank):
+    with pytest.raises(ValueError):
+        bank.add_funds('no account', 1)
+
+def test_add_funds_valid_account(bank: Bank):
+    bank.create_account('Name 1')
+    bank.create_account('Name 2')
+    bank.add_funds('Name 1', 1)
+    bank.add_funds('Name 2', 2)
+
+    transactions = list(filter(lambda transaction: transaction.account.name == 'Name 1', bank.transactions))
+
+    assert len(transactions) == 1
+    assert transactions[0].amount == 1
+
+def test_add_funds_valid_account_2_transactions(bank: Bank):
+    bank.create_account('Name 1')
+    bank.add_funds('Name 1', 1)
+    bank.add_funds('Name 1', -2)
+
+    transactions = list(filter(lambda transaction: transaction.account.name == 'Name 1', bank.transactions))
+
+    assert len(transactions) == 2
+    assert transactions[0].amount == 1
+    assert transactions[1].amount == -2
+

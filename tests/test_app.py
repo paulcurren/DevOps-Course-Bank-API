@@ -14,8 +14,28 @@ def client():
 
 
 def test_account_creation(client: FlaskClient):
-    # Use the client to make requests e.g.:
-    # client.post(...)
-    # client.get(...)
-    # https://flask.palletsprojects.com/en/1.1.x/testing/
-    pass
+
+    response = client.post('/accounts/Name1')
+    json = response.json
+
+    assert response.status_code == 200
+    assert json['name'] == 'Name1'
+
+    response2 = client.get('/accounts/Name1')
+    json2 = response2.json
+
+    assert response2.status_code == 200
+    assert json2['name'] == 'Name1'
+
+def test_bank_report(client: FlaskClient):
+
+    client.post('/accounts/Name1')
+    client.post('/money', json = {'name': 'Name1', 'amount': 1})
+    client.post('/money', json = {'name': 'Name1', 'amount': 2})
+
+    response = client.get('/balance/Name1')
+    json = response.json
+
+    assert response.status_code == 200
+    assert json == 3
+
