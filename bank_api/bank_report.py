@@ -11,7 +11,7 @@ class BankReport:
     def get_balance(self, name: str) -> int:
 
         balance = 0
-        transactions = list(filter(lambda transaction: transaction.account.name == name, self.bank.transactions))
+        transactions = list(filter(lambda transaction: transaction.account.name == name, self.bank.get_transactions()))
 
         for transaction in transactions:
             balance += transaction.amount

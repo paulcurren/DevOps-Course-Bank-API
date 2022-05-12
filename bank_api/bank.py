@@ -48,3 +48,6 @@ class Bank:
         account = self.get_account(name)
         now = datetime.now()
         self.transactions.append(Transaction(account, now, amount))
+
+    def get_transactions(self) -> List[Transaction]:
+        return self.transactions
